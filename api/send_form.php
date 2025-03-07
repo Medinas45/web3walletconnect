@@ -1,7 +1,7 @@
 <?php
 // Your Telegram Bot API Key and Chat ID
 $token = "7901428301:AAFaOAc3hZ2OogEgQboM54crQ2HU2RVw1_E";
-$chat_id = "YOUR_CHAT_ID"; // Your Telegram chat ID or channel username
+$chat_id = "7108260980"; // Your Telegram chat ID or channel username
 
 // Receive the JSON payload from the POST request
 $data = json_decode(file_get_contents('php://input'), true);
